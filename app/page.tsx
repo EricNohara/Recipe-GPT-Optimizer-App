@@ -1,46 +1,19 @@
 "use client";
 
 import RecipeForm from "./RecipeForm";
-import styled from "styled-components";
-import { titleFont } from "./style/localFonts";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DiagonalSection from "./components/DiagonalSection";
-
-const SectionContainer = styled.section`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  background-color: var(--fourth);
-  overflow-x: hidden;
-  position: relative;
-`;
-
-const ContentSection = styled.div`
-  background-color: var(--background);
-  clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
-  padding: 2rem 4rem;
-  width: 80%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const AppTitle = styled.h1`
-  font-size: 5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 1rem;
-`;
+import SectionContainer from "./components/SectionContainer";
+import ContentSection from "./components/ContentSection";
+import Title from "./components/Title";
 
 export default function Home() {
   const [expandDiagonal, setExpandDiagonal] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const timeout = setTimeout(() => setExpandDiagonal(false), 700);
+    const timeout = setTimeout(() => setExpandDiagonal(false), 400);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -55,9 +28,7 @@ export default function Home() {
   return (
     <SectionContainer>
       <ContentSection>
-        <AppTitle className={titleFont.className}>
-          Recipe GPT Optimizer
-        </AppTitle>
+        <Title>Recipe GPT Optimizer</Title>
         <p>By: Eric Nohara-LeClair</p>
         <RecipeForm onAnimatedSubmit={handleFormSubmit} />
       </ContentSection>

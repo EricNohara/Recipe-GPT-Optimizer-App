@@ -5,6 +5,32 @@ import { useEffect, useState } from "react";
 import IRecipe from "../interfaces/IRecipe";
 import RecipeCard from "./RecipeCard";
 import DiagonalSection from "../components/DiagonalSection";
+import styled from "styled-components";
+import SectionContainer from "../components/SectionContainer";
+import ContentSection from "../components/ContentSection";
+import Title from "../components/Title";
+
+const RecipeCardList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+`;
+
+const ReturnButton = styled.button`
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999999999;
+  padding: 0.75rem 1.5rem;
+  background: black;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+`;
 
 export default function RecipesPage() {
   const searchParams = useSearchParams();
@@ -14,10 +40,14 @@ export default function RecipesPage() {
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const [expandDiagonal, setExpandDiagonal] = useState(true);
   const router = useRouter();
+  const [showButton, setShowButton] = useState(false);
 
   // Entrance animation: shrink diagonal after mount
   useEffect(() => {
-    const timeout = setTimeout(() => setExpandDiagonal(false), 700);
+    const timeout = setTimeout(() => {
+      setExpandDiagonal(false);
+      setShowButton(true);
+    }, 400);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -28,7 +58,6 @@ export default function RecipesPage() {
     )
       .then((res) => res.json())
       .then((json) => {
-        console.debug("Fetched recipes:", json.data); // Debug print
         setRecipes(json.data);
       });
   }, [dish, maxLinks, sitename]);
@@ -37,39 +66,27 @@ export default function RecipesPage() {
 
   // Handle animated return
   const handleReturn = () => {
+    setShowButton(false);
     setExpandDiagonal(true);
     setTimeout(() => {
       router.push("/");
-    }, 400); // Match the transition duration
+    }, 400);
   };
 
   return (
-    <div
-      style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}
-    >
+    <SectionContainer>
       <DiagonalSection $expand={expandDiagonal} />
-      <button
-        onClick={handleReturn}
-        style={{
-          position: "absolute",
-          top: "2rem",
-          left: "2rem",
-          zIndex: 10,
-          padding: "0.75rem 1.5rem",
-          background: "var(--first)",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          fontSize: "1.1rem",
-          cursor: "pointer",
-        }}
-      >
-        ← Return
-      </button>
-      <h1>Recipes for {dish}</h1>
-      {recipes.map((recipe, idx) => (
-        <RecipeCard key={idx} recipe={recipe} />
-      ))}
-    </div>
+      {showButton && (
+        <ReturnButton onClick={handleReturn}>← Return</ReturnButton>
+      )}
+      <ContentSection>
+        <Title>Recipes for {dish}</Title>
+        {/* <RecipeCardList>
+          {recipes.map((recipe, idx) => (
+            <RecipeCard key={idx} recipe={recipe} />
+          ))}
+        </RecipeCardList> */}
+      </ContentSection>
+    </SectionContainer>
   );
 }
