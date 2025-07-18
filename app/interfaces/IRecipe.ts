@@ -1,7 +1,8 @@
 export default interface IRecipe {
-  total_time: string;
-  servings: string;
-  rating: string;
+  name: string | null;
+  total_time: string | null;
+  servings: string | null;
+  rating: string | null;
   ingredients: string[];
   directions: string[];
 }

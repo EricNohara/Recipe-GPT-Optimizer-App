@@ -8,6 +8,9 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const dish = searchParams.get("dish");
     const maxLinks = searchParams.get("maxLinks");
+    const sitename = searchParams.get("sitename");
+
+    console.log(sitename);
 
     if (!dish || dish == "")
       return NextResponse.json({
@@ -16,9 +19,7 @@ export async function GET(req: NextRequest) {
       });
 
     const res = await fetch(
-      `https://gsfmtj5f3zld6a6xxlil7wwy3a0jbglh.lambda-url.us-east-2.on.aws/?dish=${dish}${
-        maxLinks && `&max_links=${maxLinks}`
-      }`
+      `https://gsfmtj5f3zld6a6xxlil7wwy3a0jbglh.lambda-url.us-east-2.on.aws/?dish=${dish}&max_links=${maxLinks}&sitename=${sitename}`
     );
 
     if (!res.ok) throw new Error();

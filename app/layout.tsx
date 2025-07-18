@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import "./style/globals.css";
+import { baseFont } from "./style/localFonts";
 
 export const metadata: Metadata = {
   title: "Recipe GPT Optimizer",
@@ -12,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={baseFont.className}>{children}</body>
     </html>
   );
 }
