@@ -6,6 +6,7 @@ const ContentSection = styled.div`
   padding: 2rem 4rem;
   width: 80%;
   height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

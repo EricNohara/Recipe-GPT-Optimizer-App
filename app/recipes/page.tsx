@@ -16,7 +16,9 @@ const RecipeCardList = styled.ul`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: red;
+  gap: 4rem;
+  margin-top: 2rem;
+  padding: 2rem 6rem 2rem 2rem;
 `;
 
 const ReturnButton = styled.button`
@@ -74,18 +76,18 @@ export default function RecipesPage() {
   };
 
   return (
-    <SectionContainer>
+    <SectionContainer style={{ height: "100%" }}>
       <DiagonalSection $expand={expandDiagonal} />
       {showButton && (
         <ReturnButton onClick={handleReturn}>← Return</ReturnButton>
       )}
       <ContentSection>
-        <Title>Recipes for {dish}</Title>
-        {/* <RecipeCardList>
+        <Title>{dish} Recipes</Title>
+        <RecipeCardList>
           {recipes.map((recipe, idx) => (
             <RecipeCard key={idx} recipe={recipe} />
           ))}
-        </RecipeCardList> */}
+        </RecipeCardList>
       </ContentSection>
     </SectionContainer>
   );
