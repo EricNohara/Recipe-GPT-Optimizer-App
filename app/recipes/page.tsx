@@ -19,7 +19,7 @@ const RecipeCardList = styled.ul`
   justify-content: center;
   gap: 4rem;
   margin-top: 2rem;
-  padding: 2rem 6rem 2rem 2rem;
+  padding: 2rem 5rem 2rem 5rem;
 `;
 
 const ReturnButton = styled.button`
@@ -42,6 +42,7 @@ const PrintButton = styled.button`
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+  margin-top: 2%;
 `;
 
 export default function RecipesPage() {
@@ -55,7 +56,7 @@ export default function RecipesPage() {
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const [expandDiagonal, setExpandDiagonal] = useState(true);
   const [showButton, setShowButton] = useState(false);
-  const [selected, setSelected] = useState<number[]>([]);
+  const [selected, setSelected] = useState<Set<number>>(new Set());
 
   // Entrance animation: shrink diagonal after mount
   useEffect(() => {
@@ -90,13 +91,19 @@ export default function RecipesPage() {
   };
 
   const handleCheck = (idx: number, checked: boolean) => {
-    setSelected((sel) =>
-      checked ? [...sel, idx] : sel.filter((i) => i !== idx)
-    );
+    setSelected((sel) => {
+      const next = new Set(sel);
+      if (checked) {
+        next.add(idx);
+      } else {
+        next.delete(idx);
+      }
+      return next;
+    });
   };
 
   const handleLogSelected = () => {
-    const selectedRecipes = recipes.filter((_, idx) => selected.includes(idx));
+    const selectedRecipes = recipes.filter((_, idx) => selected.has(idx));
     console.log(selectedRecipes);
   };
 
@@ -107,7 +114,11 @@ export default function RecipesPage() {
         <ReturnButton onClick={handleReturn}>← Return</ReturnButton>
       )}
       <ContentSection>
-        <Title>{dish} Recipes</Title>
+        <Title
+          style={{ borderBottom: "4px solid black", paddingBottom: "1rem" }}
+        >
+          {dish} Recipes
+        </Title>
         {recipes.length == 0 && (
           <CircularProgress
             size="4rem"
@@ -129,7 +140,7 @@ export default function RecipesPage() {
               <RecipeCard
                 key={idx}
                 recipe={recipe}
-                checked={selected.includes(idx)}
+                checked={selected.has(idx)}
                 onCheck={(checked) => handleCheck(idx, checked)}
               />
             ))}

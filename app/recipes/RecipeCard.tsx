@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import IRecipe from "../interfaces/IRecipe";
-import { titleFont } from "../style/localFonts";
+import { recipeTitleFont } from "../style/localFonts";
 import { Rating } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import React from "react";
 
 interface RecipeCardProps {
   recipe: IRecipe;
@@ -22,6 +25,7 @@ const CardContainer = styled.li<{ $checked: boolean }>`
   cursor: pointer;
   border: 4px solid ${({ $checked }) => ($checked ? "black" : "transparent")};
   position: relative;
+  width: 100%;
 `;
 
 const CustomCheckbox = styled.input.attrs({ type: "checkbox" })`
@@ -40,13 +44,19 @@ const CustomLabel = styled.label`
 const CardTitle = styled.h2`
   font-size: 2.5rem;
   text-align: center;
-  font-weight: bold;
+  font-weight: 100;
+  border-bottom: 2px solid black;
+  margin-bottom: 1rem;
 `;
 
 const CardSubtitle = styled.h3`
   font-size: 1.2rem;
-  text-align: center;
   font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2%;
+  width: 100%;
 `;
 
 const IngredientsAndDirectionsContainer = styled.div`
@@ -68,11 +78,7 @@ const RecipeCardList = styled.ol`
   }
 `;
 
-export default function RecipeCard({
-  recipe,
-  checked,
-  onCheck,
-}: RecipeCardProps) {
+function RecipeCard({ recipe, checked, onCheck }: RecipeCardProps) {
   const handleCardClick = () => onCheck(!checked);
 
   const handleCheckboxClick = (e: React.MouseEvent) => {
@@ -88,7 +94,7 @@ export default function RecipeCard({
           onChange={(e) => onCheck(e.target.checked)}
         />
       </CustomLabel>
-      <CardTitle className={titleFont.className}>{recipe.name}</CardTitle>
+      <CardTitle className={recipeTitleFont.className}>{recipe.name}</CardTitle>
       {recipe.rating && (
         <Rating
           name="rating"
@@ -99,10 +105,16 @@ export default function RecipeCard({
         />
       )}
       {recipe.total_time && (
-        <CardSubtitle>{`${recipe.total_time}`}</CardSubtitle>
+        <CardSubtitle>
+          <AccessTimeIcon />
+          {recipe.total_time}
+        </CardSubtitle>
       )}
       {recipe.servings && (
-        <CardSubtitle>{`${recipe.servings} Servings`}</CardSubtitle>
+        <CardSubtitle>
+          <RestaurantIcon />
+          {`${recipe.servings} Servings`}
+        </CardSubtitle>
       )}
       <IngredientsAndDirectionsContainer>
         <RecipeCardList style={{ listStyle: "square" }}>
@@ -119,3 +131,5 @@ export default function RecipeCard({
     </CardContainer>
   );
 }
+
+export default React.memo(RecipeCard);

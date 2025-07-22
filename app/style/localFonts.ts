@@ -7,3 +7,7 @@ export const titleFont = localFont({
 export const baseFont = localFont({
   src: "../../public/fonts/base-font.woff2",
 });
+
+export const recipeTitleFont = localFont({
+  src: "../../public/fonts/recipe-title-font.woff2",
+});
