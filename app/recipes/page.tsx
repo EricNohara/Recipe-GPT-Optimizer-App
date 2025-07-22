@@ -9,6 +9,7 @@ import styled from "styled-components";
 import SectionContainer from "../components/SectionContainer";
 import ContentSection from "../components/ContentSection";
 import Title from "../components/Title";
+import { CircularProgress } from "@mui/material";
 
 const RecipeCardList = styled.ul`
   list-style: none;
@@ -77,6 +78,7 @@ export default function RecipesPage() {
   }, [dish, maxLinks, sitename]);
 
   if (!dish) return <div>No dish specified.</div>;
+  if (maxLinks && Number(maxLinks) <= 0) return <div>No recipes returned.</div>;
 
   // Handle animated return
   const handleReturn = () => {
@@ -106,6 +108,13 @@ export default function RecipesPage() {
       )}
       <ContentSection>
         <Title>{dish} Recipes</Title>
+        {recipes.length == 0 && (
+          <CircularProgress
+            size="4rem"
+            color="inherit"
+            sx={{ marginTop: "5%" }}
+          />
+        )}
         {recipes.length > 0 && (
           <PrintButton
             onClick={handleLogSelected}
