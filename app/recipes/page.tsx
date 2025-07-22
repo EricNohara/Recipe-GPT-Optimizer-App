@@ -34,15 +34,27 @@ const ReturnButton = styled.button`
   cursor: pointer;
 `;
 
+const PrintButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  background: black;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+`;
+
 export default function RecipesPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const dish = searchParams.get("dish");
   const maxLinks = searchParams.get("maxLinks");
   const sitename = searchParams.get("sitename");
+
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const [expandDiagonal, setExpandDiagonal] = useState(true);
-  const router = useRouter();
   const [showButton, setShowButton] = useState(false);
+  const [selected, setSelected] = useState<number[]>([]);
 
   // Entrance animation: shrink diagonal after mount
   useEffect(() => {
@@ -75,6 +87,17 @@ export default function RecipesPage() {
     }, 400);
   };
 
+  const handleCheck = (idx: number, checked: boolean) => {
+    setSelected((sel) =>
+      checked ? [...sel, idx] : sel.filter((i) => i !== idx)
+    );
+  };
+
+  const handleLogSelected = () => {
+    const selectedRecipes = recipes.filter((_, idx) => selected.includes(idx));
+    console.log(selectedRecipes);
+  };
+
   return (
     <SectionContainer style={{ height: "100%" }}>
       <DiagonalSection $expand={expandDiagonal} />
@@ -83,11 +106,26 @@ export default function RecipesPage() {
       )}
       <ContentSection>
         <Title>{dish} Recipes</Title>
-        <RecipeCardList>
-          {recipes.map((recipe, idx) => (
-            <RecipeCard key={idx} recipe={recipe} />
-          ))}
-        </RecipeCardList>
+        {recipes.length > 0 && (
+          <PrintButton
+            onClick={handleLogSelected}
+            style={{ marginBottom: "1rem" }}
+          >
+            Print Selected
+          </PrintButton>
+        )}
+        <div id="print-section">
+          <RecipeCardList>
+            {recipes.map((recipe, idx) => (
+              <RecipeCard
+                key={idx}
+                recipe={recipe}
+                checked={selected.includes(idx)}
+                onCheck={(checked) => handleCheck(idx, checked)}
+              />
+            ))}
+          </RecipeCardList>
+        </div>
       </ContentSection>
     </SectionContainer>
   );

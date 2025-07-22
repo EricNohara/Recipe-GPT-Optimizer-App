@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const maxLinks = searchParams.get("maxLinks");
     const sitename = searchParams.get("sitename");
 
-    console.log(sitename);
+    console.log(dish, maxLinks, sitename);
 
     if (!dish || dish == "")
       return NextResponse.json({

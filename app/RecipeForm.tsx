@@ -71,6 +71,10 @@ const options = [
   { value: "serious-eats", label: "seriouseats.com" },
 ];
 
+function cleanInput(str: string) {
+  return str.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
 export default function RecipeForm({
   onAnimatedSubmit,
 }: {
@@ -106,8 +110,9 @@ export default function RecipeForm({
 
     const formData = new FormData(e.currentTarget);
     const dishRaw = formData.get("dish");
-    const dish = typeof dishRaw === "string" ? dishRaw.trim() : "";
-    const maxLinks = formData.get("max-links");
+    const dish = typeof dishRaw === "string" ? cleanInput(dishRaw) : "";
+    const maxLinksRaw = formData.get("max-links");
+    const maxLinks = maxLinksRaw ? maxLinksRaw : "20";
     const sitename = selected.value;
 
     if (dish == "") return;
